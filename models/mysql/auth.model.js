@@ -48,13 +48,16 @@ export class AuthModel {
         error.statusCode = 400
         throw error
       }
-      const token = await jwt.sign({userId: userFound[0].userId }, process.env.PRIVATE_KEY, {expiresIn: "15m"});
+      const accessToken = await jwt.sign({userId: userFound[0].userId }, process.env.PRIVATE_KEY, {expiresIn: "15m"});
+
+      const refreshToken = await jwt.sign({userId: userFound[0].userId }, process.env.PRIVATE_KEY_REFRESH, {expiresIn: "7d"});
 
       const { password: _, ...userWithoutPassword } = userFound[0];
 
       return {
         user: userWithoutPassword,
-        token
+        accessToken,
+        refreshToken
       };
   
     } catch (error) {
@@ -63,22 +66,26 @@ export class AuthModel {
     }
   }
 
-  static async tokenRefresh( ) {
+  static async tokenRefresh(refreshToken) {
     try {
-
-      
-      // const token = await jwt.sign({userId: userFound[0].userId }, process.env.PRIVATE_KEY_REFRESH, {expiresIn: "7d"});
-
-      // const { password: _, ...userWithoutPassword } = userFound[0];
-
-      // return {
-      //   user: userWithoutPassword,
-      //   token
-      // };
+      if (!refreshToken) {
+        throw new Error("No refresh token provided");
+      }
   
+      const decoded = jwt.verify(refreshToken, process.env.PRIVATE_KEY_REFRESH)
+      
+      const newAccessToken = jwt.sign(
+        { userId: decoded.userId },
+        process.env.PRIVATE_KEY,
+        { expiresIn: "15m" }
+      );
+  
+      return { accessToken: newAccessToken };
     } catch (error) {
-      console.log('👀 👉🏽 ~  errorUserFound:', error)
-      throw error
+      console.log("👀 👉🏽 ~ errorRefreshToken:", error);
+  
+      throw new Error("Invalid or expired refresh token");
     }
   }
+  
 }

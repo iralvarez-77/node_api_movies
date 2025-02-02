@@ -9,6 +9,7 @@ export const register = async (req, res) => {
 			message: 'user created successfully',
 			data: user,
 		});
+		
 	} catch (error) {
 		if (error.message === 'DUPLICATE_EMAIL')
 			sendErrorResponse(res, 409, 'Email is already registered');
@@ -21,9 +22,15 @@ export const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
-		const { user, token } = await AuthModel.signIn(email, password);
+		const { user, accessToken, refreshToken } = await AuthModel.signIn(email, password);
     
-		res.cookie('accessToken', token, {
+		res.cookie('accessToken', accessToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'strict',
+		});
+		
+		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
 			sameSite: 'strict',
@@ -44,17 +51,27 @@ export const login = async (req, res) => {
 };
 
 export const refresh = async (req, res) => {
-	console.log('👀 👉🏽 ~  req:', req)
-	try {
-		
-		const result = await AuthModel.tokenRefresh(id)
-		console.log('👀 👉🏽 ~  result:', result)
-		res.cookie('refreshToken', token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			sameSite: 'strict',
-		});
-	} catch (error) {}
+  try {
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: "No refresh token provided" });
+    }
+
+    const { accessToken } = await AuthModel.tokenRefresh(refreshToken);
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.status(200).json({ message: "Token refreshed successfully" });
+  } catch (error) {
+    console.log("Error en refresh token:", error);
+    res.status(401).json({ message: "Invalid or expired refresh token" });
+  }
 };
 
 export const logOut = (_req, res) => {
