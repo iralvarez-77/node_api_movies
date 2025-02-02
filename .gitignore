@@ -2,4 +2,4 @@
 /coverage
 .env
 .vscode
-user.http
+endpoints.http
