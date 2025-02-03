@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 
 export const authRequired = (req, res, next) => {
   try {
-    console.log('👀 👉🏽 ~  req.cookies:', req.cookies)
     const {accessToken} = req.cookies
     if (!accessToken) throw new Error('No token provided')
 
