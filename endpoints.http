@@ -1,0 +1,49 @@
+###
+POST http://localhost:4000/api/v1/register
+content-type: application/json
+
+{
+  "userName": "admin2",
+  "email": "admin2@gmail.com",
+  "password": ""
+}
+
+###
+POST http://localhost:4000/api/v1/login
+content-type: application/json
+
+{
+  "email": "admin2@gmail.com",
+  "password": ""
+}
+
+###
+POST http://localhost:4000/api/v1/refresh
+content-type: application/json
+
+###
+POST http://localhost:4000/api/v1/logout
+content-type: application/json
+
+###
+GET http://localhost:4000/api/v1/movies
+
+###
+GET http://localhost:4000/api/v1/movies?genre=action
+
+###
+GET http://localhost:4000/api/v1/movies?orderDirection=asc
+
+### 
+GET http://localhost:4000/api/v1/movies?genre=suspense&orderDirection=desc
+
+###
+POST http://localhost:4000/api/v1/directors
+content-type: application/json
+
+{
+  "name": "Shonda Lynn Rhimes"
+}
+
+###
+GET http://localhost:4000/api/v1/episodes/11
