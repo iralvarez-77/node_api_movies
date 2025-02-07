@@ -1,5 +1,6 @@
 import { AuthModel } from '../models/mysql/auth.model.js';
 import { sendErrorResponse } from '../utils/sendError.js';
+import { setCookie } from '../utils/setCookie.js';
 
 export const register = async (req, res) => {
 	try {
@@ -23,18 +24,21 @@ export const login = async (req, res) => {
 		const { email, password } = req.body;
 
 		const { user, accessToken, refreshToken } = await AuthModel.signIn(email, password);
-    
-		res.cookie('accessToken', accessToken, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			sameSite: 'strict',
-		});
 		
-		res.cookie('refreshToken', refreshToken, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			sameSite: 'strict',
-		});
+		setCookie(res, 'accessToken', accessToken)
+		setCookie(res, 'refreshToken', refreshToken)
+    
+		// res.cookie('accessToken', accessToken, {
+		// 	httpOnly: true,
+		// 	secure: process.env.NODE_ENV === 'production',
+		// 	sameSite: 'strict',
+		// });
+		
+		// res.cookie('refreshToken', refreshToken, {
+		// 	httpOnly: true,
+		// 	secure: process.env.NODE_ENV === 'production',
+		// 	sameSite: 'strict',
+		// });
 
 		res.status(200).json({
 			message: 'successfully',
