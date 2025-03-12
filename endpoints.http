@@ -3,9 +3,9 @@ POST http://localhost:4000/api/v1/register
 content-type: application/json
 
 {
-  "userName": "admin3",
-  "email": "admin3@gmail.com",
-  "password": ""
+  "userName": "admin4",
+  "email": "admin4@gmail.com",
+  "password": "1234567"
 }
 
 ###
@@ -13,8 +13,8 @@ POST http://localhost:4000/api/v1/login
 content-type: application/json
 
 {
-  "email": "admin3@gmail.com",
-  "password": ""
+  "email": "admin4@gmail.com",
+  "password": "1234567"
 }
 
 ###

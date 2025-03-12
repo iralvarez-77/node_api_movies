@@ -23,26 +23,20 @@ export const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
-		const { user, accessToken, refreshToken } = await AuthModel.signIn(email, password);
-		
-		setCookie(res, 'accessToken', accessToken)
-		setCookie(res, 'refreshToken', refreshToken)
-    
-		// res.cookie('accessToken', accessToken, {
-		// 	httpOnly: true,
-		// 	secure: process.env.NODE_ENV === 'production',
-		// 	sameSite: 'strict',
-		// });
-		
-		// res.cookie('refreshToken', refreshToken, {
-		// 	httpOnly: true,
-		// 	secure: process.env.NODE_ENV === 'production',
-		// 	sameSite: 'strict',
-		// });
+		const { user, accessToken, expiresIn, refreshToken } = await AuthModel.signIn(email, password);
+
+		res.cookie("refresh-token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    })
 
 		res.status(200).json({
 			message: 'successfully',
 			data: { user },
+			accessToken,
+			expiresIn
 		});
 
 	} catch (error) {
