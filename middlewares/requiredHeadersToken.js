@@ -1,7 +1,7 @@
 
 import jwt from "jsonwebtoken"
 
-const requiredHeaderHToken = (req, res, next) => {
+const requiredHeaderToken = (req, _res, next) => {
 
   try {
     let accessToken = req.headers.authorization
@@ -13,9 +13,9 @@ const requiredHeaderHToken = (req, res, next) => {
 
     next()
   } catch (error) {
-    console.log('👀 👉🏽 ~  errorRequiredHeaderHToken:', error)
+    console.log('👀 👉🏽 ~  errorRequiredHeaderToken:', error)
     
   }
 }
 
-export default requiredHeaderHToken
+export default requiredHeaderToken
