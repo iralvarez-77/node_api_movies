@@ -6,6 +6,6 @@ const router = Router()
 router.post('/register', register)
 router.post('/login', login)
 router.post('/logout', logOut)
-router.post('refresh', refresh)
+router.post('/refresh', refresh)
 
 export default router

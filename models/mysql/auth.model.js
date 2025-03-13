@@ -67,19 +67,11 @@ export class AuthModel {
 
 	static async tokenRefresh(refreshToken) {
 		try {
-			if (!refreshToken) {
-				throw new Error('No refresh token provided');
-			}
 
-			const decoded = jwt.verify(refreshToken, process.env.PRIVATE_KEY_REFRESH);
+			const { id } = jwt.verify(refreshToken, process.env.PRIVATE_KEY_REFRESH);
+			const {accessToken, expiresIn} = generateAccessToken(id)
 
-			const newAccessToken = jwt.sign(
-				{ userId: decoded.userId },
-				process.env.PRIVATE_KEY,
-				{ expiresIn: '15m' }
-			);
-
-			return { accessToken: newAccessToken };
+			return { accessToken, expiresIn };
 		} catch (error) {
 			console.log('👀 👉🏽 ~ errorRefreshToken:', error);
 

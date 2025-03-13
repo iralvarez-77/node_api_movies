@@ -5,7 +5,7 @@ export const authRequired = (req, res, next) => {
     const {accessToken} = req.cookies
     if (!accessToken) throw new Error('No token provided')
 
-    const user = jwt.verify(accessToken, process.env.PRIVATE_KEY)
+    const user = jwt.verify(accessToken, process.env.PRIVATE_KEY_ACCESS)
     req.user = user;
     next()
 

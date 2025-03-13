@@ -25,7 +25,7 @@ export const login = async (req, res) => {
 
 		const { user, accessToken, expiresIn, refreshToken } = await AuthModel.signIn(email, password);
 
-		setCookie(res, "refresh-token", refreshToken)
+		setCookie(res, "refreshToken", refreshToken)
 
 		res.status(200).json({
 			message: 'successfully',
@@ -51,16 +51,9 @@ export const refresh = async (req, res) => {
       return res.status(401).json({ message: "No refresh token provided" });
     }
 
-    const { accessToken } = await AuthModel.tokenRefresh(refreshToken);
+    const {accessToken, expiresIn} = await AuthModel.tokenRefresh(refreshToken);
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000,
-    });
-
-    res.status(200).json({ message: "Token refreshed successfully" });
+    res.status(200).json({ accessToken, expiresIn });
   } catch (error) {
     console.log("Error en refresh token:", error);
     res.status(401).json({ message: "Invalid or expired refresh token" });
@@ -69,7 +62,7 @@ export const refresh = async (req, res) => {
 
 export const logOut = (_req, res) => {
 	try {
-		res.clearCookie('token');
+		res.clearCookie('refresh-token');
 		res.status(200).json({ message: 'Logout successful' });
 	} catch (error) {
 		console.log('👀 👉🏽 ~  errorControllerLogOut:', error);
