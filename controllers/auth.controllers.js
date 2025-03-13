@@ -47,12 +47,12 @@ export const refresh = async (req, res) => {
   try {
     const { refreshToken } = req.cookies;
 
-    if (!refreshToken) {
+    if (!refreshToken) 
       return res.status(401).json({ message: "No refresh token provided" });
-    }
 
     const {accessToken, expiresIn} = await AuthModel.tokenRefresh(refreshToken);
 
+    console.log('👀 👉🏽 ~  accessToken:', accessToken)
     res.status(200).json({ accessToken, expiresIn });
   } catch (error) {
     console.log("Error en refresh token:", error);
