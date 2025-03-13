@@ -62,7 +62,7 @@ export const refresh = async (req, res) => {
 
 export const logOut = (_req, res) => {
 	try {
-		res.clearCookie('refresh-token');
+		res.clearCookie('refreshToken');
 		res.status(200).json({ message: 'Logout successful' });
 	} catch (error) {
 		console.log('👀 👉🏽 ~  errorControllerLogOut:', error);
