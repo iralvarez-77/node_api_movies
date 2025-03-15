@@ -70,9 +70,9 @@ export class AuthModel {
 		try {
 
 			const { id } = jwt.verify(refreshToken, process.env.PRIVATE_KEY_REFRESH);
-			const {accessToken, expiresIn} = generateAccessToken(id)
+			const accessToken = generateAccessToken(id)
 
-			return { accessToken, expiresIn };
+			return accessToken;
 		} catch (error) {
 			console.log('👀 👉🏽 ~ errorRefreshToken:', error);
 
