@@ -23,15 +23,14 @@ export const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
-		const { user, accessToken, expiresIn, refreshToken } = await AuthModel.signIn(email, password);
+		const { user, accessToken, refreshToken } = await AuthModel.signIn(email, password);
 
+		setCookie(res, "accessToken", accessToken)
 		setCookie(res, "refreshToken", refreshToken)
 
 		res.status(200).json({
 			message: 'successfully',
 			data: { user },
-			accessToken,
-			expiresIn
 		});
 
 	} catch (error) {

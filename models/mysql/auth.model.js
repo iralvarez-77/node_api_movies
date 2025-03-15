@@ -40,7 +40,9 @@ export class AuthModel {
 				throw error;
 			}
 
-			const isMatch = await bcrypt.compare(password, userFound[0].password);
+			const user = userFound[0]
+
+			const isMatch = await bcrypt.compare(password, user.password);
 
 			if (!isMatch) {
 				const error = new Error('invalid credentials');
@@ -48,15 +50,14 @@ export class AuthModel {
 				throw error;
 			}
 
-      const {accessToken, expiresIn} = generateAccessToken(userFound[0].userId)
-      const refreshToken = generateRefreshToken(userFound[0].userId)
+      const accessToken = generateAccessToken(user.userId)
+      const refreshToken = generateRefreshToken(user.userId)
 
-			const { password: _, ...userWithoutPassword } = userFound[0];
+			const { password: _, ...userWithoutPassword } = user;
 
 			return {
 				user: userWithoutPassword,
 				accessToken,
-				expiresIn,
         refreshToken
 			};
 		} catch (error) {

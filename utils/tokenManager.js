@@ -4,7 +4,7 @@ export const generateAccessToken = (id) => {
 	const expiresIn = '15m';
 	try {
 		const accessToken = jwt.sign({ id }, process.env.PRIVATE_KEY_ACCESS, { expiresIn });
-		return { accessToken, expiresIn };
+		return accessToken;
 	} catch (error) {
 		console.log('👀 👉🏽 ~  error:', error);
 	}
