@@ -15,7 +15,7 @@ app.use(express.json());
 app.use (cookieParser())
 
 app.use('/api/v1', authRouterV1)
-app.use('/api/v1', moviesRouterV1)
+app.use('/api/v1', requiredHeaderToken, moviesRouterV1)
 app.use('/api/v1',authRequired, directorsRouterV1)
 app.use('/api/v1', authRequired,  episodesRouterV1)
 
