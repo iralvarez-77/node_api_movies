@@ -5,7 +5,7 @@ import moviesRouterV1 from './routes/movies.routes.js'
 import episodesRouterV1 from './routes/episodes.routes.js'
 import directorsRouterV1 from './routes/directors.routes.js'
 import { authRequired } from './middlewares/authRequired.js';
-import requiredHeaderToken from "./middlewares/requiredHeadersToken.js"
+// import requiredHeaderToken from "./middlewares/requiredHeadersToken.js"
 
 
 const app = express();
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use (cookieParser())
 
 app.use('/api/v1', authRouterV1)
-app.use('/api/v1', requiredHeaderToken, moviesRouterV1)
+app.use('/api/v1', moviesRouterV1)
 app.use('/api/v1',authRequired, directorsRouterV1)
 app.use('/api/v1', authRequired,  episodesRouterV1)
 
