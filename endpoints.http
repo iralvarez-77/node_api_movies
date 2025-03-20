@@ -47,4 +47,4 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:4000/api/v1/episodes/11
+GET http://localhost:4000/api/v1/episodes/10

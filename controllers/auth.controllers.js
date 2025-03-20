@@ -1,5 +1,5 @@
 import { AuthModel } from '../models/mysql/auth.model.js';
-import { sendErrorResponse } from '../utils/sendError.js';
+import { sentError } from '../utils/sentError.js';
 import { setCookie } from '../utils/setCookie.js';
 
 export const register = async (req, res) => {
@@ -13,9 +13,9 @@ export const register = async (req, res) => {
 		
 	} catch (error) {
 		if (error.message === 'DUPLICATE_EMAIL')
-			sendErrorResponse(res, 409, 'Email is already registered');
+			sentError(res, 409, 'Email is already registered');
 
-		sendErrorResponse(res, 500, 'Internal Server Error');
+		sentError(res, 500, 'Internal Server Error');
 	}
 };
 

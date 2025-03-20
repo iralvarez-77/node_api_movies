@@ -1,14 +1,12 @@
 import { MoviesModel } from "../models/mysql/movies.model.js";
+import { catchedAsync } from "../utils/catchedAsync.js";
+import {sentResponse} from "../utils/sentResponse.js"
 
-export const getMovies = async (req, res) => {
-  try {
+
+export const getMovies = catchedAsync( async (req, res) => {
+
     const { genre, orderDirection } = req.query
     const movies = await MoviesModel.getAllMovies({ genre, orderDirection});
-    res.status(200).json(movies);
-    
-  } catch (error) {
-  console.log('👀 👉🏽 ~  errorMovieController:', error)
-
-  }
-}
+    sentResponse(res, 200, movies)
+})
 

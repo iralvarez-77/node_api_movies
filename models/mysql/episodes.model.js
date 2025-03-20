@@ -1,4 +1,5 @@
 import pool from '../../database.js';
+import { ClientError } from '../../utils/validateErrors.js';
 
 export class EpisodesModel {
 	static async getEpisodeById(id) {
@@ -17,14 +18,12 @@ export class EpisodesModel {
     JOIN directors d ON e.director_id = d.id
     WHERE e.id = ?;
 `;
-		try {
+		
 			const [result] = await pool.query(query, [id]);
 
-			if (result.length === 0) throw new Error();
+			if (result.length === 0) throw new ClientError("not found", 404)
 
 			return result[0];
-		} catch (error) {
-			console.log('👀 👉🏽 ~  errorGeetEpisodeById:', error);
-		}
+		
 	}
 }

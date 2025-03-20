@@ -4,7 +4,8 @@ import authRouterV1 from './routes/auth.routes.js'
 import moviesRouterV1 from './routes/movies.routes.js'
 import episodesRouterV1 from './routes/episodes.routes.js'
 import directorsRouterV1 from './routes/directors.routes.js'
-import { authRequired } from './middlewares/authRequired.js';
+import { sentError } from './utils/sentError.js';
+// import { authRequired } from './middlewares/authRequired.js';
 // import requiredHeaderToken from "./middlewares/requiredHeadersToken.js"
 
 
@@ -16,8 +17,13 @@ app.use (cookieParser())
 
 app.use('/api/v1', authRouterV1)
 app.use('/api/v1', moviesRouterV1)
-app.use('/api/v1',authRequired, directorsRouterV1)
-app.use('/api/v1', authRequired,  episodesRouterV1)
+app.use('/api/v1',directorsRouterV1)
+app.use('/api/v1', episodesRouterV1)
+
+app.use((err, _req, res, _next) => {
+  const {statusCode, message} = err
+  sentError(res, statusCode, message)
+})
 
 const PORT = process.env.PORT || 3000;
 
