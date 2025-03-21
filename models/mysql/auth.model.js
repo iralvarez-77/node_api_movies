@@ -24,9 +24,8 @@ export class AuthModel {
 			return data;
 		} catch (error) {
 			console.log('👀 👉🏽 ~  errorSignUP:', error);
-			if (error.code === "ER_DUP_ENTRY") {
+			if (error.code === "ER_DUP_ENTRY") 
 				throw { statusCode: 409, message: "the email is already registered" };
-		}
 		}
 	}
 
@@ -71,8 +70,6 @@ export class AuthModel {
 			return accessToken;
 		} catch (error) {
 			console.log('👀 👉🏽 ~ errorRefreshToken:', error);
-
-			throw new Error('Invalid or expired refresh token');
 		}
 	}
 }

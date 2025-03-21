@@ -1,8 +1,8 @@
 import { AuthModel } from '../models/mysql/auth.model.js';
 import { catchedAsync } from '../utils/catchedAsync.js';
-import { sentError } from '../utils/sentError.js';
 import { sentResponse } from '../utils/sentResponse.js';
 import { setCookie } from '../utils/setCookie.js';
+import { AuthErrors } from '../utils/validateErrors.js';
 
 export const register = catchedAsync( async (req, res) => {
 	
@@ -27,27 +27,19 @@ export const login = catchedAsync( async (req, res) => {
 		})
 })
 
-export const refresh = async (req, res) => {
-  try {
+export const refresh = catchedAsync( async (req, res) => {
+  
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) 
-      return res.status(401).json({ message: "No refresh token provided" });
+			throw new AuthErrors("No refresh token provided", 401)
 
     const accessToken = await AuthModel.tokenRefresh(refreshToken);
-
-    res.status(200).json({ accessToken});
-  } catch (error) {
-    console.log("Error en refresh token:", error);
-    res.status(401).json({ message: "Invalid or expired refresh token" });
-  }
-};
+		sentResponse(res, 200, accessToken )
+})
 
 export const logOut = (_req, res) => {
-	try {
+		
 		res.clearCookie('refreshToken');
-		res.status(200).json({ message: 'Logout successful' });
-	} catch (error) {
-		console.log('👀 👉🏽 ~  errorControllerLogOut:', error);
-	}
-};
+		sentResponse(res, 200, 'Logout successful')
+}
