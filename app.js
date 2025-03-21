@@ -21,7 +21,8 @@ app.use('/api/v1',directorsRouterV1)
 app.use('/api/v1', episodesRouterV1)
 
 app.use((err, _req, res, _next) => {
-  const {statusCode, message} = err
+  const statusCode = err.statusCode || 500; 
+  const message = err.message || "Internal Server Error";
   sentError(res, statusCode, message)
 })
 

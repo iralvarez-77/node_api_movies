@@ -2,6 +2,7 @@ import pool from '../../database.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { generateAccessToken, generateRefreshToken } from '../../utils/tokenManager.js';
+import { ClientError } from '../../utils/validateErrors.js';
 
 export class AuthModel {
 	static async signUp({ userName, email, password }) {
@@ -22,8 +23,10 @@ export class AuthModel {
 
 			return data;
 		} catch (error) {
-			console.log('👀 👉🏽 ~  errorDetectado:', error);
-			throw error;
+			console.log('👀 👉🏽 ~  errorSignUP:', error);
+			if (error.code === "ER_DUP_ENTRY") {
+				throw { statusCode: 409, message: "the email is already registered" };
+		}
 		}
 	}
 
@@ -34,21 +37,14 @@ export class AuthModel {
 				[email]
 			);
 
-			if (userFound.length === 0) {
-				const error = new Error('User not found');
-				error.statusCode = 404;
-				throw error;
-			}
+			if (userFound.length === 0) throw new ClientError("User not found", 404)
 
 			const user = userFound[0]
 
 			const isMatch = await bcrypt.compare(password, user.password);
 
-			if (!isMatch) {
-				const error = new Error('invalid credentials');
-				error.statusCode = 400;
-				throw error;
-			}
+			if (!isMatch) throw ClientError('invalid credentials', 400)
+				
 
       const accessToken = generateAccessToken(user.userId)
       const refreshToken = generateRefreshToken(user.userId)
@@ -61,7 +57,7 @@ export class AuthModel {
         refreshToken
 			};
 		} catch (error) {
-			console.log('👀 👉🏽 ~  errorUserFound:', error);
+			console.log('👀 👉🏽 ~  errorSignIn:', error);
 			throw error;
 		}
 	}

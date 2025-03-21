@@ -1,46 +1,31 @@
 import { AuthModel } from '../models/mysql/auth.model.js';
+import { catchedAsync } from '../utils/catchedAsync.js';
 import { sentError } from '../utils/sentError.js';
+import { sentResponse } from '../utils/sentResponse.js';
 import { setCookie } from '../utils/setCookie.js';
 
-export const register = async (req, res) => {
-	try {
+export const register = catchedAsync( async (req, res) => {
+	
 		const user = await AuthModel.signUp(req.body);
-
-		res.status(201).json({
+		sentResponse(res, 201, {
 			message: 'user created successfully',
 			data: user,
-		});
-		
-	} catch (error) {
-		if (error.message === 'DUPLICATE_EMAIL')
-			sentError(res, 409, 'Email is already registered');
+		})
+})
 
-		sentError(res, 500, 'Internal Server Error');
-	}
-};
-
-export const login = async (req, res) => {
-	try {
+export const login = catchedAsync( async (req, res) => {
+	
 		const { email, password } = req.body;
 
 		const { user, accessToken, refreshToken } = await AuthModel.signIn(email, password);
 
 		setCookie(res, "refreshToken", refreshToken)
-
-		res.status(200).json({
+		sentResponse(res, 200, {
 			message: 'successfully',
-			data: { user },
+			user,
 			accessToken
-		});
-
-	} catch (error) {
-		console.log('👀 👉🏽 ~  errorLogin:', error);
-
-		if (error.statusCode === 404) sendErrorResponse(res, 404, error.message);
-
-		if (error.statusCode === 400) sendErrorResponse(res, 400, error.message);
-	}
-};
+		})
+})
 
 export const refresh = async (req, res) => {
   try {

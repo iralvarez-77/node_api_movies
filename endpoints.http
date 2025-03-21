@@ -3,8 +3,8 @@ POST http://localhost:4000/api/v1/register
 content-type: application/json
 
 {
-  "userName": "admin4",
-  "email": "admin4@gmail.com",
+  "userName": "admin6",
+  "email": "admin6@gmail.com",
   "password": "1234567"
 }
 
@@ -43,8 +43,8 @@ POST http://localhost:4000/api/v1/directors
 content-type: application/json
 
 {
-  "name": "Shonda Lynn Rhimes"
+  "name": "Steven Spielberg"
 }
 
 ###
-GET http://localhost:4000/api/v1/episodes/10
+GET http://localhost:4000/api/v1/episodes/11

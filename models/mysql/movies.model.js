@@ -2,7 +2,7 @@ import pool from "../../database.js"
 
 export class MoviesModel {
 	static async getAllMovies({genre, orderDirection} = {}) {
-		try {
+		
 			let query = "SELECT * FROM movies";
       const params = [];
 
@@ -18,10 +18,5 @@ export class MoviesModel {
 
 			const [movies] = await pool.query(query, params);
 			return movies
-
-		} catch (error) {
-			console.log('👀 👉🏽 ~  errorGetAllMovies:', error);
-		}
 	}
-
 }

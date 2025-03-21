@@ -4,3 +4,10 @@ export class ClientError extends Error {
     this.statusCode = status
   }
 }
+
+export class AuthErrors extends Error {
+  constructor(message,status) {
+    super(message)
+    this.statusCode = status
+  }
+}
