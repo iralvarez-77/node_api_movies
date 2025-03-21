@@ -43,7 +43,7 @@ export class AuthModel {
 
 			const isMatch = await bcrypt.compare(password, user.password);
 
-			if (!isMatch) throw ClientError('invalid credentials', 400)
+			if (!isMatch) throw new ClientError('invalid credentials', 400)
 				
 
       const accessToken = generateAccessToken(user.userId)
